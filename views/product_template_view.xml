@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="send_to_advancloud" model="ir.actions.server">
+        <field name="name">Send to AdvanCloud</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">records.send_to_advancloud()</field>
+    </record>
+
+</odoo>
