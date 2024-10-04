@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_warehouse" model="ir.ui.view">
+        <field name="name">stock.warehouse.inherit.advancloud</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <group position="inside">
+                <group string="AdvanCloud">
+                    <group>
+                        <field name="shop_id_advancloud"/>
+                    </group>
+                </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>

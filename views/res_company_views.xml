@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_company_form_advancloud" model="ir.ui.view">
+        <field name="name">res.company.form.advancloud</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="AdvanCloud">
+                    <group string="AdvanCloud">
+                        <group>
+                            <field name="user_advancloud"/>
+                            <field name="password_advancloud"/>
+                            <field name="url_advancloud"/>
+                            <field name="app_advancloud"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>

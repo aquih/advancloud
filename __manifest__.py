@@ -9,7 +9,10 @@
     'website': 'http://aquih.com/',
     'depends' : [ 'stock' ],
     'data' : [
-        'views/product_template_view.xml',
+        'views/res_company_views.xml',
+        'views/product_template_views.xml',
+        'views/stock_warehouse_views.xml',
+        'views/stock_location_views.xml',
     ],
     'installable': True,
     'license': 'Other OSI approved licence',
