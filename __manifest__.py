@@ -13,6 +13,8 @@
         'views/product_template_views.xml',
         'views/stock_warehouse_views.xml',
         'views/stock_location_views.xml',
+        'wizard/send_to_advancloud.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
     'license': 'Other OSI approved licence',
