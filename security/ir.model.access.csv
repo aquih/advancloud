@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-send_to_advancloud,send_to_advancloud_action,model_advancloud_send_to_advancloud,stock.group_stock_manager,1,1,1,1
+send_products,send_products,model_advancloud_send_products,stock.group_stock_manager,1,1,1,1
+get_stock,get_stock,model_advancloud_get_stock,stock.group_stock_manager,1,1,1,1
+stock,stock,model_advancloud_stock,stock.group_stock_manager,1,1,1,1

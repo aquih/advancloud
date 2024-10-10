@@ -1,3 +1,3 @@
 # -*- encoding: utf-8 -*-
 
-from . import send_to_advancloud
+from . import send_products, get_stock

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="stock_view_tree" model="ir.ui.view">
+        <field name="name">advancloud.stock.view.tree</field>
+        <field name="model">advancloud.stock</field>
+        <field name="arch" type="xml">
+            <tree string="Stocks">
+                <header>
+                    <button name="advancloud.get_stock_action" type="action" string="Get Stocks" display="always"/>
+                </header>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_view_form" model="ir.ui.view">
+        <field name="name">advancloud.stock.view.form</field>
+        <field name="model">advancloud.stock</field>
+        <field name="arch" type="xml">
+            <form string="Stocks">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="stock_action" model="ir.actions.act_window" >
+        <field name="name">AdvanCloud Stocks</field>
+        <field name="res_model">advancloud.stock</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                View AdvanCloud Stocks
+            </p><p>
+                AdvanCloud Stocks
+            </p>
+        </field>
+    </record>
+
+    <menuitem name="AdvanCloud Stocks" id="menu_stocks" action="stock_action" parent="stock.menu_stock_warehouse_mgmt" sequence="199"/>
+
+</odoo>

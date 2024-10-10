@@ -8,13 +8,13 @@ import logging
 import csv
 import io
 
-class SendToAdvanCloud(models.TransientModel):
-    _name = 'advancloud.send_to_advancloud'
+class SendProductsToAdvanCloud(models.TransientModel):
+    _name = 'advancloud.send_products'
 
     def _default_company(self):
         return self.env.company.id
 
-    def _default_productos(self):
+    def _default_products(self):
         active_ids = self._context.get('active_ids', [])
         if len(active_ids) > 0:
             products = self.env['product.product'].browse(active_ids)
@@ -23,9 +23,9 @@ class SendToAdvanCloud(models.TransientModel):
             return None
 
     company_id = fields.Many2one('res.company', string='Company', required=True, default=_default_company)
-    product_ids = fields.Many2many("product.template", string="Productos", default=_default_productos)
+    product_ids = fields.Many2many("product.template", string="Productos", default=_default_products)
 
-    def send_to_advancloud(self):
+    def send(self):
         data = {
             'grant_type': 'password',
             'username': self.company_id.user_advancloud,

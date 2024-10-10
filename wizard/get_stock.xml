@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="get_stock_form" model="ir.ui.view">
+        <field name="name">advancloud.get_stock</field>
+        <field name="model">advancloud.get_stock</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Get Stocks">
+                <group>
+                    <group>
+                        <field name="company_id"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="get" string="Get" type="object" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel" class="oe_link"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="get_stock_action" model="ir.actions.act_window">
+        <field name="name">Get Stock From AdvanCloud</field>
+        <field name="res_model">advancloud.get_stock</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
