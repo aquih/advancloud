@@ -9,10 +9,11 @@
                 <header>
                     <button name="advancloud.get_stock_action" type="action" string="Get Stocks" display="always"/>
                 </header>
+                <field name="date"/>
                 <field name="code"/>
                 <field name="epc"/>
                 <field name="sku"/>
-                <field name="date"/>
+                <button name="create_inventories" string="Create Physical Inventories" type="object"/>
             </tree>
         </field>
     </record>
@@ -22,13 +23,20 @@
         <field name="model">advancloud.stock</field>
         <field name="arch" type="xml">
             <form string="Stocks">
+                <header>
+                    <button name="create_inventories" string="Create Physical Inventories" type="object" class="oe_highlight"/>
+                </header>
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code"/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
-                            <field name="code"/>
+                            <field name="date"/>
                             <field name="epc"/>
                             <field name="sku"/>
-                            <field name="date"/>
                         </group>
                         <group>
                             <field name="company_id"/>
