@@ -10,6 +10,9 @@
                     <button name="advancloud.get_stock_action" type="action" string="Get Stocks" display="always"/>
                 </header>
                 <field name="code"/>
+                <field name="epc"/>
+                <field name="sku"/>
+                <field name="date"/>
             </tree>
         </field>
     </record>
@@ -21,7 +24,17 @@
             <form string="Stocks">
                 <sheet>
                     <group>
-                        <field name="code"/>
+                        <group>
+                            <field name="code"/>
+                            <field name="epc"/>
+                            <field name="sku"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="location_id"/>
+                        </group>
                     </group>
                 </sheet>
             </form>

@@ -3,10 +3,9 @@
 from odoo import models, fields, api, Command, _
 from odoo.exceptions import UserError, ValidationError
 
+from datetime import datetime
 import requests
 import logging
-import csv
-import io
 
 class GetStock(models.TransientModel):
     _name = 'advancloud.get_stock'
@@ -41,4 +40,19 @@ class GetStock(models.TransientModel):
 
             result = r.json()
 
-            self.env['advancloud.stock'].create([ { 'code': s['code'] } for s in result['inventories'] ])
+            for s in result['inventories']:
+                if not self.env['advancloud.stock'].search([('code','=',s['code'])]):
+                    warehouse = self.env['stock.warehouse'].search([('shop_id_advancloud','=',s['shop'])])
+                    location = self.env['stock.location'].search([('zone_id_advancloud','=',s['zone'])])
+
+                    self.env['advancloud.stock'].create([
+                        {
+                            'code': s['code'],
+                            'epc': s['numberOfEpcs'],
+                            'sku': s['numberOfEans'],
+                            'date': datetime.fromtimestamp(s['timestamp']/1000),
+                            'company_id': self.company_id.id,
+                            'warehouse_id': warehouse.id,
+                            'location_id': location.id,
+                        }
+                    ])
