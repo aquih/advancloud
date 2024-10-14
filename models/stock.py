@@ -48,9 +48,11 @@ class Stock(models.Model):
 
             products = {}
             for data in result['data']:
+                if not self.env['stock.quant'].search([('product_id','=',data['productid']), ('inventory_advancloud','=',result['properties']['code'])]):
                 if data['productid'] not in products:
-                    products[data['productid']] = { 'product_id': data['productid'], 'location_id': self.location_id.id, 'inventory_quantity': 0}
+                    products[data['productid']] = { 'product_id': 26, 'location_id': self.location_id.id, 'inventory_quantity': 0, 'inventory_advancloud': result['properties']['code'] }
                 products[data['productid']]['inventory_quantity'] += 1
+            logging.warning(products.values())
 
             self.env['stock.quant'].with_context(inventory_mode=True).create(products.values())
 
