@@ -12,13 +12,27 @@ class Stock(models.Model):
     _order = 'date desc'
     _check_company_auto = True
 
-    code = fields.Char('Code')
+    code = fields.Char('Code', index=True)
     epc = fields.Integer('# EPC')
     sku = fields.Integer('# SKU')
     date = fields.Datetime('Date')
     company_id = fields.Many2one('res.company', string='Company', required=True)
     warehouse_id = fields.Many2one('stock.warehouse', string='Warehouse', required=True, check_company=True)
     location_id = fields.Many2one('stock.location', string='Location', required=True, check_company=True)
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('done', 'Done'),
+    ], string='Status', default='draft', index=True, readonly=True, tracking=True)
+
+    _sql_constraints = [
+        ('uniq_name', 'unique(code)', 'This stock already exists.'),
+    ]
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_done(self):
+        if any(m.state == 'done' for m in self):
+            raise UserError(_("You can't delete a done stock"))
+
 
     def create_inventories(self):
         for w in self:
@@ -48,12 +62,11 @@ class Stock(models.Model):
 
             products = {}
             for data in result['data']:
-                if not self.env['stock.quant'].search([('product_id','=',data['productid']), ('inventory_advancloud','=',result['properties']['code'])]):
                 if data['productid'] not in products:
-                    products[data['productid']] = { 'product_id': 26, 'location_id': self.location_id.id, 'inventory_quantity': 0, 'inventory_advancloud': result['properties']['code'] }
+                    products[data['productid']] = { 'product_id': 26, 'location_id': self.location_id.id, 'inventory_quantity': 0 }
                 products[data['productid']]['inventory_quantity'] += 1
-            logging.warning(products.values())
 
             self.env['stock.quant'].with_context(inventory_mode=True).create(products.values())
+            self.state = 'done'
 
         return self.env['stock.quant'].action_view_inventory()
