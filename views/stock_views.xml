@@ -25,6 +25,7 @@
             <form string="Stocks">
                 <header>
                     <button name="create_inventories" string="Create Physical Inventories" type="object" class="oe_highlight" invisible="state == 'done'"/>
+                    <button name="button_draft" string="Reset to Draft" type="object" invisible="state == 'draft'" groups="base.group_system"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>

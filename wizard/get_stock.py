@@ -41,7 +41,7 @@ class GetStock(models.TransientModel):
             result = r.json()
 
             for s in result['inventories']:
-                if not self.env['advancloud.stock'].search([('code','=',s['code'])]):
+                if not self.env['advancloud.stock'].search([('code','=',s['code'])]) and s['type'] == 'UPLOAD':
                     warehouse = self.env['stock.warehouse'].search([('shop_id_advancloud','=',s['shop'])])
                     location = self.env['stock.location'].search([('zone_id_advancloud','=',s['zone'])])
 

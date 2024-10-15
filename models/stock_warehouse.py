@@ -8,4 +8,4 @@ import logging
 class StockWarehouse(models.Model):
     _inherit = 'stock.warehouse'
 
-    shop_id_advancloud = fields.Char('Shop ID AdvanCloud')
+    shop_id_advancloud = fields.Char('Shop ID')

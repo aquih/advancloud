@@ -4,6 +4,7 @@ from odoo import models, fields, api, Command, _
 from odoo.exceptions import UserError, ValidationError
 
 import requests
+import re
 import logging
 
 class Stock(models.Model):
@@ -33,7 +34,6 @@ class Stock(models.Model):
         if any(m.state == 'done' for m in self):
             raise UserError(_("You can't delete a done stock"))
 
-
     def create_inventories(self):
         for w in self:
             data = {
@@ -62,11 +62,22 @@ class Stock(models.Model):
 
             products = {}
             for data in result['data']:
-                if data['productid'] not in products:
-                    products[data['productid']] = { 'product_id': 26, 'location_id': self.location_id.id, 'inventory_quantity': 0 }
-                products[data['productid']]['inventory_quantity'] += 1
+                product_id = 0
+                if 'productid' in data:
+                    product_id = data['productid']
+                elif self.location_id.decode_epc_advancloud:
+                    loc = {}
+                    exec(self.location_id.decode_epc_advancloud, { 'epc': data['epc'], 're': re }, loc)
+                    product_id = loc['product_id']
+
+                if product_id not in products:
+                    products[product_id] = { 'product_id': int(product_id), 'location_id': self.location_id.id, 'inventory_quantity': 0 }
+                products[product_id]['inventory_quantity'] += 1
 
             self.env['stock.quant'].with_context(inventory_mode=True).create(products.values())
             self.state = 'done'
 
         return self.env['stock.quant'].action_view_inventory()
+
+    def button_draft(self):
+        self.state = 'draft'

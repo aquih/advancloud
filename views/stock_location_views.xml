@@ -8,9 +8,8 @@
         <field name="arch" type="xml">
             <group position="inside">
                 <group string="AdvanCloud">
-                    <group>
-                        <field name="zone_id_advancloud"/>
-                    </group>
+                    <field name="zone_id_advancloud"/>
+                    <field name="decode_epc_advancloud" widget="code"/>
                 </group>
             </group>
         </field>
