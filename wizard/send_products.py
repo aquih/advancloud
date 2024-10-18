@@ -23,7 +23,7 @@ class SendProductsToAdvanCloud(models.TransientModel):
             return None
 
     company_id = fields.Many2one('res.company', string='Company', required=True, default=_default_company)
-    product_ids = fields.Many2many("product.template", string="Productos", default=_default_products)
+    product_ids = fields.Many2many("product.product", string="Productos", default=_default_products)
 
     def send(self):
         data = {

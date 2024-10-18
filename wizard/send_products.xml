@@ -24,7 +24,7 @@
         <field name="name">Send Products To AdvanCloud</field>
         <field name="res_model">advancloud.send_products</field>
         <field name="view_mode">form</field>
-        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_product"/>
         <field name="target">new</field>
     </record>
     
