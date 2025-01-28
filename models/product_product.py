@@ -5,17 +5,22 @@ from odoo.exceptions import UserError, ValidationError
 
 import logging
 import io
+import random
 
 from epc.schemes import SGTIN
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    def _get_epc(self, serial):
+    def _get_epc(self, serial=None):
         self.ensure_one()
         if self.barcode:
             sgtin = SGTIN()
-            sgtin.decode_gtin(self.barcode, 6, serial_number=serial)
+            s = random.randint(1,99999999999)
+            if serial:
+                s = serial
+            
+            sgtin.decode_gtin(self.barcode, 6, serial_number=s)
             sgtin.filter(1)
 
             return ('%x' % sgtin).upper()
