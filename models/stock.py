@@ -7,6 +7,8 @@ import requests
 import re
 import logging
 
+from epc.utils import decode_epc
+
 class Stock(models.Model):
     _name = 'advancloud.stock'
     _rec_name = 'code'
@@ -56,23 +58,32 @@ class Stock(models.Model):
                 'reporttype': 'json',
             }
             r = requests.post('https://{}/advancloud/import/stock/download/{}'.format(self.company_id.url_advancloud, self.code), data=data, headers=headers)
-            logging.warning(r.text)
-
             result = r.json()
 
             products = {}
             for data in result['data']:
                 product_id = 0
+
+                # Try to get the product_id from advancloud
                 if 'productid' in data:
                     product_id = data['productid']
-                elif self.location_id.decode_epc_advancloud:
-                    loc = {}
-                    exec(self.location_id.decode_epc_advancloud, { 'epc': data['epc'], 're': re }, loc)
-                    product_id = loc['product_id']
+                else:
+                    # If no product_id, get the barcode from the EPC
+                    epc = decode_epc(data['epc'])
+                    codigo_barras = epc.gtin.lstrip('0')
+                    products_for_barcode = self.env['product.product'].search([('barcode','like',codigo_barras)])
+                    if len(products_for_barcode) > 0:
+                        product_id = products_for_barcode[0].id
+                    elif self.location_id.decode_epc_advancloud:
+                        # If none of those works, try to get the product_id with a decode function
+                        loc = {}
+                        exec(self.location_id.decode_epc_advancloud, { 'epc': data['epc'], 're': re }, loc)
+                        product_id = loc['product_id']
 
-                if product_id not in products:
-                    products[product_id] = { 'product_id': int(product_id), 'location_id': self.location_id.id, 'inventory_quantity': 0 }
-                products[product_id]['inventory_quantity'] += 1
+                if product_id:
+                    if product_id not in products:
+                        products[product_id] = { 'product_id': int(product_id), 'location_id': self.location_id.id, 'inventory_quantity': 0 }
+                    products[product_id]['inventory_quantity'] += 1
 
             self.env['stock.quant'].with_context(inventory_mode=True).create(products.values())
             self.state = 'done'
